@@ -1,217 +1,304 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GEO 진단 워크플로우</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:#0e0e10;
-  color:#e8e6e0;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  min-height:100vh;
-  display:flex;flex-direction:column;align-items:center;
-  padding:40px 20px 80px;
-}
-.header{max-width:1000px;text-align:center;margin-bottom:32px}
-.header h1{font-size:26px;font-weight:700;color:#fff;margin-bottom:8px}
-.header p{font-size:14px;color:#8c8c93}
-.canvas-wrap{
-  width:100%;max-width:1920px;
-  overflow-x:auto;
-  border-radius:16px;
-  border:1px solid #222;
-}
-.canvas-wrap svg{display:block;width:100%;height:auto;min-width:1200px}
-.legend{
-  display:flex;gap:28px;margin-top:24px;
-  font-size:13px;color:#8c8c93;
-}
-.legend-item{display:flex;align-items:center;gap:8px}
-.legend-dot{width:14px;height:14px;border-radius:4px}
-.legend-dot.data{border:1.5px dashed #6C8CFF;background:rgba(108,140,255,.1)}
-.legend-dot.proc{border:1.5px solid #3a3a40;background:#292930}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
 </head>
 <body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #000; overflow-x: hidden; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  </style>
+</helmet>
 
-<div class="header">
-  <h1>GEO 진단 워크플로우</h1>
-  <p>기획 셋업부터 리포트 완성까지 14단계 · n8n 스타일 노드 다이어그램</p>
+<div style="font-family: 'IBM Plex Sans', -apple-system, sans-serif; color: #e0deda; background: #000; min-height: 100vh;">
+
+  <!-- ============ HEADER ============ -->
+  <div style="padding: 64px 64px 40px; max-width: 1440px; margin: 0 auto;">
+    <h1 style="font-size: 48px; font-weight: 800; color: #fff; margin: 0; letter-spacing: -1.5px; line-height: 1.1;">GEO 진단 워크플로우</h1>
+  </div>
+
+  <!-- ============ NODE MAP (n8n style) ============ -->
+  <div style="padding: 0 64px; max-width: 1440px; margin: 0 auto 72px; overflow-x: auto;">
+      <svg viewBox="0 0 1400 560" xmlns="http://www.w3.org/2000/svg" style="display: block; width: 100%; height: auto; min-width: 900px;">
+        <defs>
+          <pattern id="grid-dots" width="24" height="24" patternUnits="userSpaceOnUse">
+            <circle cx="12" cy="12" r="1" fill="#ffffff" opacity="0.06"/>
+          </pattern>
+        </defs>
+
+        <!-- ===== CONNECTORS ===== -->
+        <g fill="none" stroke="#444" stroke-width="1.5">
+          <!-- 0 → 1,2,3 fan out -->
+          <path d="M300 240 C350 240, 350 120, 400 120"/>
+          <path d="M200 240 C350 240, 350 240, 400 240"/>
+          <path d="M200 240 C350 240, 350 360, 400 360"/>
+          <!-- 1,2,3 → 4 converge -->
+          <path d="M500 120 C560 120, 560 240, 620 240"/>
+          <path d="M500 240 C560 240, 560 240, 620 240"/>
+          <path d="M500 360 C560 360, 560 240, 620 240"/>
+          <!-- 4 → 5 -->
+          <path d="M720 240 L780 240"/>
+          <!-- 5 → 6 -->
+          <path d="M880 240 L940 240"/>
+          <!-- 6 → 7 -->
+          <path d="M1040 240 L1100 240"/>
+          <!-- 7 → 8 (wrap down) -->
+          <path d="M1200 240 C1250 240, 1250 470, 1200 470"/>
+          <!-- 8 → 9 -->
+          <path d="M1100 470 L1040 470"/>
+          <!-- 9 → 10 -->
+          <path d="M940 470 L880 470"/>
+          <!-- 10 → 11 -->
+          <path d="M780 470 L720 470"/>
+          <!-- 11 → 12 -->
+          <path d="M620 470 L560 470"/>
+          <!-- 12 → 13 -->
+          <path d="M460 470 L400 470"/>
+        </g>
+
+        <!-- ===== CONNECTOR DOTS ===== -->
+        <g fill="#555">
+          <circle cx="500" cy="240" r="3.5"/>
+          <circle cx="500" cy="120" r="3.5"/>
+          <circle cx="300" cy="240" r="3.5"/>
+          <circle cx="500" cy="360" r="3.5"/>
+          <circle cx="400" cy="120" r="3.5"/>
+          <circle cx="400" cy="240" r="3.5"/>
+          <circle cx="400" cy="360" r="3.5"/>
+          <circle cx="720" cy="240" r="3.5"/>
+          <circle cx="620" cy="240" r="3.5"/>
+          <circle cx="880" cy="240" r="3.5"/>
+          <circle cx="780" cy="240" r="3.5"/>
+          <circle cx="1040" cy="240" r="3.5"/>
+          <circle cx="940" cy="240" r="3.5"/>
+          <circle cx="1200" cy="240" r="3.5"/>
+          <circle cx="1100" cy="240" r="3.5"/>
+          <circle cx="1200" cy="470" r="3.5"/>
+          <circle cx="1100" cy="470" r="3.5"/>
+          <circle cx="1040" cy="470" r="3.5"/>
+          <circle cx="940" cy="470" r="3.5"/>
+          <circle cx="880" cy="470" r="3.5"/>
+          <circle cx="780" cy="470" r="3.5"/>
+          <circle cx="720" cy="470" r="3.5"/>
+          <circle cx="620" cy="470" r="3.5"/>
+          <circle cx="560" cy="470" r="3.5"/>
+          <circle cx="460" cy="470" r="3.5"/>
+          <circle cx="400" cy="470" r="3.5"/>
+        </g>
+
+        <!-- Legend (top-right) -->
+        <rect x="1050" y="20" width="16" height="16" rx="4" fill="#1e1510" stroke="#FF5700" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="1074" y="33" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#bbb" font-weight="500">리스닝마인드 데이터</text>
+        <rect x="1230" y="20" width="16" height="16" rx="4" fill="#222226" stroke="#444" stroke-width="1.2"/>
+        <text x="1254" y="33" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#bbb" font-weight="500">프로세스</text>
+
+        <!-- ===== NODES (clickable) ===== -->
+        <g onClick="{{ onClickNode0 }}" style="cursor:pointer;">
+          <rect x="200" y="200" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel0stroke }}" stroke-width="{{ sel0sw }}"/>
+          <text x="250" y="222" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#FF5700">0</text>
+          <text x="250" y="248" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">기획 셋업</text>
+        </g>
+
+        <g onClick="{{ onClickNode1 }}" style="cursor:pointer;">
+          <rect x="400" y="80" width="100" height="80" rx="16" fill="#1e1510" stroke="{{ sel1stroke }}" stroke-width="{{ sel1sw }}" stroke-dasharray="5,4"/>
+          <text x="450" y="102" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#FF570099">1</text>
+          <text x="450" y="125" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">쿼리</text>
+          <text x="450" y="142" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">파인더</text>
+        </g>
+
+        <g onClick="{{ onClickNode2 }}" style="cursor:pointer;">
+          <rect x="400" y="200" width="100" height="80" rx="16" fill="#1e1510" stroke="{{ sel2stroke }}" stroke-width="{{ sel2sw }}" stroke-dasharray="5,4"/>
+          <text x="450" y="222" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#FF570099">2</text>
+          <text x="450" y="245" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">CEP</text>
+          <text x="450" y="262" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">파인더</text>
+        </g>
+
+        <g onClick="{{ onClickNode3 }}" style="cursor:pointer;">
+          <rect x="400" y="320" width="100" height="80" rx="16" fill="#1e1510" stroke="{{ sel3stroke }}" stroke-width="{{ sel3sw }}" stroke-dasharray="5,4"/>
+          <text x="450" y="342" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#FF570099">3</text>
+          <text x="450" y="365" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">클러스터</text>
+          <text x="450" y="382" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">파인더</text>
+        </g>
+
+        <g onClick="{{ onClickNode4 }}" style="cursor:pointer;">
+          <rect x="620" y="200" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel4stroke }}" stroke-width="{{ sel4sw }}"/>
+          <text x="670" y="222" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#888">4</text>
+          <text x="670" y="245" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">페르소나</text>
+          <text x="670" y="262" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">설계</text>
+        </g>
+
+        <g onClick="{{ onClickNode5 }}" style="cursor:pointer;">
+          <rect x="780" y="200" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel5stroke }}" stroke-width="{{ sel5sw }}"/>
+          <text x="830" y="222" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#888">5</text>
+          <text x="830" y="245" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">질의세트</text>
+          <text x="830" y="262" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">작성</text>
+        </g>
+
+        <g onClick="{{ onClickNode6 }}" style="cursor:pointer;">
+          <rect x="940" y="200" width="100" height="80" rx="16" fill="#1e1510" stroke="{{ sel6stroke }}" stroke-width="{{ sel6sw }}" stroke-dasharray="5,4"/>
+          <text x="990" y="222" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#FF570099">6</text>
+          <text x="990" y="245" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">패스 파인더</text>
+          <text x="990" y="262" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">검증</text>
+        </g>
+
+        <g onClick="{{ onClickNode7 }}" style="cursor:pointer;">
+          <rect x="1100" y="200" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel7stroke }}" stroke-width="{{ sel7sw }}"/>
+          <text x="1150" y="222" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#888">7</text>
+          <text x="1150" y="245" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">AI 테스트</text>
+          <text x="1150" y="262" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">실행</text>
+        </g>
+
+        <!-- Row 2 -->
+        <g onClick="{{ onClickNode8 }}" style="cursor:pointer;">
+          <rect x="1100" y="430" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel8stroke }}" stroke-width="{{ sel8sw }}"/>
+          <text x="1150" y="452" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#888">8</text>
+          <text x="1150" y="475" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">원본 응답</text>
+          <text x="1150" y="492" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">수집</text>
+        </g>
+
+        <g onClick="{{ onClickNode9 }}" style="cursor:pointer;">
+          <rect x="940" y="430" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel9stroke }}" stroke-width="{{ sel9sw }}"/>
+          <text x="990" y="452" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#888">9</text>
+          <text x="990" y="475" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">답변 분석</text>
+        </g>
+
+        <g onClick="{{ onClickNode10 }}" style="cursor:pointer;">
+          <rect x="780" y="430" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel10stroke }}" stroke-width="{{ sel10sw }}"/>
+          <text x="830" y="452" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#888">10</text>
+          <text x="830" y="475" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">경쟁사 정의</text>
+        </g>
+
+        <g onClick="{{ onClickNode11 }}" style="cursor:pointer;">
+          <rect x="620" y="430" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel11stroke }}" stroke-width="{{ sel11sw }}"/>
+          <text x="670" y="452" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#888">11</text>
+          <text x="670" y="475" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">사이트 진단</text>
+        </g>
+
+        <g onClick="{{ onClickNode12 }}" style="cursor:pointer;">
+          <rect x="460" y="430" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel12stroke }}" stroke-width="{{ sel12sw }}"/>
+          <text x="510" y="452" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#888">12</text>
+          <text x="510" y="475" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">벤치마킹</text>
+          <text x="510" y="492" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="#ddd" font-weight="600">비교</text>
+        </g>
+
+        <g onClick="{{ onClickNode13 }}" style="cursor:pointer;">
+          <rect x="300" y="430" width="100" height="80" rx="16" fill="#222226" stroke="{{ sel13stroke }}" stroke-width="{{ sel13sw }}"/>
+          <text x="350" y="452" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#FF5700">13</text>
+          <text x="350" y="478" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#FF5700" font-weight="700">리포트 완성</text>
+        </g>
+
+      </svg>
+  </div>
+
+  <!-- ============ DETAIL PANEL (single card, driven by click) ============ -->
+  <div style="max-width: 1440px; margin: 0 auto; padding: 0 64px 96px;">
+    <sc-if value="{{ showDetail }}" hint-placeholder-val="{{ true }}">
+      <div style="background: #131316; border: 1px solid #1e1e22; border-radius: 12px; padding: 28px 32px; display: flex; gap: 24px; align-items: flex-start;">
+        <div style="font-family: 'IBM Plex Sans', sans-serif; font-size: 48px; font-weight: 800; color: #FF5700; line-height: 1; min-width: 56px;">{{ selectedNum }}</div>
+        <div style="flex: 1; padding-top: 4px;">
+          <div style="background: #FF5700; border-radius: 8px; padding: 10px 18px; margin-bottom: 12px; display: inline-block;">
+            <span style="font-size: 14px; font-weight: 600; color: #fff;">{{ selectedTitle }}</span>
+          </div>
+          <div style="background: #f5f5f0; border-radius: 8px; padding: 14px 20px; margin-bottom: 8px;">
+            <p style="font-size: 14px; color: #1a1a1a; line-height: 1.7; margin: 0;">{{ selectedDesc }}</p>
+          </div>
+          <sc-if value="{{ selectedNote }}" hint-placeholder-val="{{ false }}">
+            <div style="background: #f5f5f0; border-radius: 8px; padding: 14px 20px; margin-bottom: 8px;">
+              <p style="font-size: 13px; color: #555; line-height: 1.6; margin: 0;">{{ selectedNote }}</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ selectedWarning }}" hint-placeholder-val="{{ false }}">
+            <div style="background: #1a1510; border: 1px solid #FF570033; border-radius: 8px; padding: 12px 18px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="font-size: 14px; flex-shrink: 0;">⚠️</span>
+              <p style="font-size: 13px; color: #FF5700cc; line-height: 1.6; margin: 0; font-weight: 500;">{{ selectedWarning }}</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ selectedOutput }}" hint-placeholder-val="{{ false }}">
+            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 0;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #FF5700;">→</span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #888;">{{ selectedOutput }}</span>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ showHint }}" hint-placeholder-val="{{ true }}">
+      <div style="text-align: center; padding: 40px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; animation: fadeIn 0.6s ease-out;">
+        <div style="animation: bounce 1.8s ease-in-out infinite; font-size: 24px;">👆</div>
+        <p style="font-size: 14px; color: #555; margin: 0;">노드를 클릭하면 상세 내용이 표시됩니다</p>
+      </div>
+    </sc-if>
+  </div>
 </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { selected: null };
 
-<div class="canvas-wrap">
-<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <pattern id="dots" width="48" height="48" patternUnits="userSpaceOnUse">
-    <circle cx="24" cy="24" r="1.4" fill="#ffffff" opacity="0.06"/>
-  </pattern>
-</defs>
+  steps = [
+    { num: '0', title: '기획 정렬 — 기획 셋업(Scoping)', desc: '클라이언트 사이트 훑어보고, 경쟁사 정하고, 어떤 키워드로 시작할지 방향을 잡아요.', output: null, warning: null, note: null, isData: false },
+    { num: '1', title: '유효 키워드 뽑기 — 쿼리 파인더 (AI Overview 필터)', desc: '쿼리 파인더로, AI가 실제로 화면에 띄우는 키워드만 걸러내요. 이 키워드들은 검색량 순서로 줄을 세워서 다음 단계에 쓸 우선순위를 정해요.', output: '유효 쿼리 풀(Valid Query Pool) 확보', warning: null, note: null, isData: true },
+    { num: '2', title: '소비자 상황 뽑기 — CEP 파인더 (Category Entry Point)', desc: 'CEP 파인더로, 사람들이 "어떤 상황에서" 이 제품을 찾는지 봐요. 이게 나중에 AI한테 던질 질문(프롬프트)의 원재료가 돼요.', output: '프롬프트 원본 시나리오 확보', warning: null, note: null, isData: true },
+    { num: '3', title: '인식 그룹 뽑기 — 클러스터 파인더', desc: '클러스터 파인더로, 소비자들이 이 제품을 머릿속에서 어떻게 나눠서 생각하는지 봐요. 이 그룹이 나중에 "페르소나 종류"의 뼈대가 돼요.', output: '소비자 인식 클러스터 → 페르소나 카테고리 설계', warning: null, note: null, isData: true },
+    { num: '4', title: '페르소나 확정 — 페르소나 설계 (LM 데이터 기반, 가설 금지)', desc: '1~3단계 데이터를 가지고 페르소나 5개를 만들어요. 이 때 사람이 최종 확인/승인해요.', output: null, warning: '페르소나와 질문은 반드시 1~3단계 실데이터로만 만들어요. AI가 추측으로 만들면, 실제 소비자가 쓰지 않는 질문이 섞여서 테스트 결과 자체가 왜곡돼요.', note: null, isData: false },
+    { num: '5', title: '질의세트 작성 — 1~3단계 결과물 기반', desc: '페르소나 1개당 질문 20개, 총 100개 질문을 만들어요.', output: '질의세트(Query Set)', warning: '질문에 브랜드 이름을 직접 넣으면, AI가 해당 브랜드를 언급할 확률이 인위적으로 올라가서 SoM/SoV 측정값이 실제보다 부풀려져요.', note: null, isData: false },
+    { num: '6', title: '최종 검증 — 패스 파인더', desc: '패스 파인더로, 소비자가 제품을 사기까지 어떤 여정(단계)을 거치는지 보고, 4단계에서 만든 질문들이 이 여정의 어느 부분을 놓치고 있는지 확인해요.', output: '질의세트 퍼널 커버리지 검증(Funnel Coverage Validation)', warning: null, note: null, isData: true },
+    { num: '7', title: 'AI 테스트 실행 — AI 패널 테스트(User Test, UT)', desc: '완성된 질의세트를 AI들한테 실제로 물어봐요. 일반 소비자가 실제로 쓰는 환경과 똑같이, 무료 또는 저가 구독 모델을 써요.', output: null, warning: null, note: null, isData: false },
+    { num: '8', title: '답변 원본 수집 — 원본 응답 시트(Raw Response Sheet)', desc: 'AI들이 낸 답변을 전부 크롤링해서 하나의 시트로 모아요. (나중에 답변 패턴을 다시 추적/검증할 때 쓰는 원본 데이터예요)', output: null, warning: null, note: null, isData: false },
+    { num: '9', title: '답변 분석 — SoM/SoV 분석 + 경쟁사 언급 추출', desc: '이 답변들을 갖고 브랜드가 얼마나 언급됐는지(SoM), 전체 언급 중 비중이 얼마나 되는지(SoV)를 계산하고, AI가 어떤 경쟁사를 인용했는지 뽑아내요.', output: null, warning: null, note: '(참고로 감성 분석, Perplexity 인용 URL 분석도 같은 단계에서 같이 봐요.)', isData: false },
+    { num: '10', title: '경쟁사 정의 — 경쟁사 언급 추출(Competitor Mention Extraction)', desc: 'AI가 언급하는 경쟁사들을 나열해요.', output: null, warning: null, note: null, isData: false },
+    { num: '11', title: '사이트 진단 — 경쟁사 기술 진단(Competitor Technical GEO Audit)', desc: '10단계에서 뽑힌 경쟁사 상위 3곳의 사이트 구조를 하나씩 분석해요. (llms.txt 있는지, Schema.org 마크업 있는지, FAQ 마크업 있는지 등)', output: null, warning: null, note: null, isData: false },
+    { num: '12', title: '우리 vs 경쟁사 비교 — 경쟁사 벤치마킹(Competitive Benchmarking)', desc: '자사 사이트와 경쟁사 사이트 구조를 나란히 비교해요.', output: null, warning: null, note: null, isData: false },
+    { num: '13', title: '리포트 완성', desc: '9단계(답변 분석 데이터)와 12단계(사이트 구조 비교 데이터)를 합쳐서 최종 리포트를 만들어요.', output: null, warning: null, note: null, isData: false },
+  ];
 
-<rect x="0" y="0" width="1920" height="1080" fill="#19191d"/>
-<rect x="0" y="0" width="1920" height="1080" fill="url(#dots)"/>
+  selectNode(idx) {
+    this.setState({ selected: this.state.selected === idx ? null : idx });
+  }
 
-<!-- ===================== CONNECTORS ===================== -->
-<g fill="none" stroke="#55555f" stroke-width="1.8" stroke-linecap="round">
-<path d="M220 400 C308 400,292 160,380 160"/>
-<path d="M220 400 C308 400,292 400,380 400"/>
-<path d="M220 400 C308 400,292 640,380 640"/>
-<path d="M500 160 C588 160,572 400,660 400"/>
-<path d="M500 400 C588 400,572 400,660 400"/>
-<path d="M500 640 C588 640,572 400,660 400"/>
-<path d="M780 400 C835 400,825 400,880 400"/>
-<path d="M1000 400 C1055 400,1045 400,1100 400"/>
-<path d="M1220 400 C1275 400,1265 400,1320 400"/>
-<path d="M1440 400 C703 400,837 860,100 860"/>
-<path d="M220 860 C275 860,265 860,320 860"/>
-<path d="M440 860 C495 860,485 860,540 860"/>
-<path d="M660 860 C715 860,705 860,760 860"/>
-<path d="M880 860 C935 860,925 860,980 860"/>
-<path d="M1100 860 C1155 860,1145 860,1200 860"/>
-<path d="M1320 860 L1366 860"/>
-</g>
+  nodeStroke(idx, defaultStroke) {
+    return this.state.selected === idx ? '#FF5700' : defaultStroke;
+  }
+  nodeSW(idx, defaultSW) {
+    return this.state.selected === idx ? 3 : defaultSW;
+  }
 
-<!-- ===================== TRIGGER BOLT ===================== -->
-<g transform="translate(50,387)"><path d="M11 1L2 15h6l-1 10 9-14h-6z" fill="#EF4444"/></g>
+  renderVals() {
+    var s = this.state.selected;
+    var step = s !== null ? this.steps[s] : null;
+    var vals = {
+      showDetail: s !== null,
+      showHint: s === null,
+      selectedNum: step ? step.num : '',
+      selectedTitle: step ? step.title : '',
+      selectedDesc: step ? step.desc : '',
+      selectedOutput: step ? step.output : null,
+      selectedWarning: step ? step.warning : null,
+      selectedNote: step ? step.note : null,
+    };
 
-<!-- ===================== PORT DOTS ===================== -->
-<g>
-<circle cx="220" cy="400" r="4" fill="#6b6b74"/>
-<circle cx="380" cy="160" r="4" fill="#6C8CFF"/>
-<circle cx="380" cy="400" r="4" fill="#6C8CFF"/>
-<circle cx="380" cy="640" r="4" fill="#6C8CFF"/>
-<circle cx="500" cy="160" r="4" fill="#6C8CFF"/>
-<circle cx="500" cy="400" r="4" fill="#6C8CFF"/>
-<circle cx="500" cy="640" r="4" fill="#6C8CFF"/>
-<circle cx="660" cy="400" r="4" fill="#6b6b74"/>
-<circle cx="780" cy="400" r="4" fill="#6b6b74"/>
-<circle cx="880" cy="400" r="4" fill="#6b6b74"/>
-<circle cx="1000" cy="400" r="4" fill="#6b6b74"/>
-<circle cx="1100" cy="400" r="4" fill="#6C8CFF"/>
-<circle cx="1220" cy="400" r="4" fill="#6C8CFF"/>
-<circle cx="1320" cy="400" r="4" fill="#6b6b74"/>
-<circle cx="1440" cy="400" r="4" fill="#6b6b74"/>
-<circle cx="100" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="220" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="320" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="440" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="540" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="660" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="760" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="880" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="980" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="1100" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="1200" cy="860" r="4" fill="#6b6b74"/>
-<circle cx="1320" cy="860" r="4" fill="#6b6b74"/>
-</g>
+    // Data nodes: 1,2,3,6
+    var dataDefault = '#FF5700';
+    var procDefault = '#333';
 
-<!-- ===================== NODES ===================== -->
-<!-- helper classes: .proc = solid gray box, .data = dashed blue box -->
-<style>
-  .proc-box{fill:#292930;stroke:#3a3a40;stroke-width:1.5}
-  .data-box{fill:#202537;stroke:#6C8CFF;stroke-width:1.5;stroke-dasharray:5,4}
-  .icon-proc{fill:none;stroke:#c7c7cf;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .icon-data{fill:none;stroke:#8AA4FF;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .title{font-size:15px;font-weight:700;fill:#f5f5f7;text-anchor:middle}
-  .sub{font-size:11.5px;fill:#8c8c93;text-anchor:middle}
-</style>
+    for (var i = 0; i <= 13; i++) {
+      var isData = this.steps[i].isData;
+      var def = isData ? dataDefault : procDefault;
+      var defSW = (i === 13) ? 2 : 1.5;
+      vals['sel' + i + 'stroke'] = this.nodeStroke(i, def);
+      vals['sel' + i + 'sw'] = this.nodeSW(i, defSW);
+      vals['onClickNode' + i] = this.selectNode.bind(this, i);
+    }
 
-<!-- 1. 기획 셋업 -->
-<rect class="proc-box" x="100" y="340" width="120" height="120" rx="22"/>
-<g class="icon-proc" transform="translate(138,378) scale(1.8)"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="#c7c7cf"/></g>
-<text class="title" x="160" y="484">기획 셋업</text>
-<text class="sub" x="160" y="504">Scoping</text>
-
-<!-- 2. 쿼리 파인더 (data) -->
-<rect class="data-box" x="380" y="100" width="120" height="120" rx="22"/>
-<g class="icon-data" transform="translate(418,138) scale(1.8)"><circle cx="10" cy="10" r="6"/><line x1="14.5" y1="14.5" x2="20" y2="20"/></g>
-<text class="title" x="440" y="244">쿼리 파인더</text>
-<text class="sub" x="440" y="264">AI Overview 필터</text>
-
-<!-- 3. CEP 파인더 (data) -->
-<rect class="data-box" x="380" y="340" width="120" height="120" rx="22"/>
-<g class="icon-data" transform="translate(418,378) scale(1.8)"><circle cx="9" cy="10" r="4"/><circle cx="16" cy="10" r="3"/></g>
-<text class="title" x="440" y="484">CEP 파인더</text>
-<text class="sub" x="440" y="504">진입 시나리오</text>
-
-<!-- 4. 클러스터 파인더 (data) -->
-<rect class="data-box" x="380" y="580" width="120" height="120" rx="22"/>
-<g class="icon-data" transform="translate(418,618) scale(1.8)"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="9" y="14" width="6" height="6" rx="1"/></g>
-<text class="title" x="440" y="724">클러스터 파인더</text>
-<text class="sub" x="440" y="744">인식 클러스터</text>
-
-<!-- 5. 페르소나 설계 -->
-<rect class="proc-box" x="660" y="340" width="120" height="120" rx="22"/>
-<g class="icon-proc" transform="translate(698,378) scale(1.8)"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></g>
-<text class="title" x="720" y="484">페르소나 설계</text>
-<text class="sub" x="720" y="504">LM 데이터 기반 5개</text>
-
-<!-- 6. 질의세트 작성 -->
-<rect class="proc-box" x="880" y="340" width="120" height="120" rx="22"/>
-<g class="icon-proc" transform="translate(918,378) scale(1.8)"><line x1="5" y1="7" x2="19" y2="7"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="5" y1="17" x2="13" y2="17"/><path d="M15 18l2 2l4-4"/></g>
-<text class="title" x="940" y="484">질의세트 작성</text>
-<text class="sub" x="940" y="504">20개 x 5, 총 100개</text>
-
-<!-- 7. 패스 파인더 검증 (data) -->
-<rect class="data-box" x="1100" y="340" width="120" height="120" rx="22"/>
-<g class="icon-data" transform="translate(1138,378) scale(1.8)"><circle cx="5" cy="19" r="2"/><circle cx="19" cy="5" r="2"/><path d="M7 18c4-2 6-8 10-11" stroke-dasharray="3,3"/></g>
-<text class="title" x="1160" y="484">패스 파인더 검증</text>
-<text class="sub" x="1160" y="504">퍼널 커버리지 검증</text>
-
-<!-- 8. AI 패널 테스트 -->
-<rect class="proc-box" x="1320" y="340" width="120" height="120" rx="22"/>
-<g class="icon-proc" transform="translate(1358,378) scale(1.8)"><rect x="5" y="9" width="14" height="10" rx="2"/><circle cx="9.5" cy="14" r="1.3" fill="#c7c7cf"/><circle cx="14.5" cy="14" r="1.3" fill="#c7c7cf"/><line x1="12" y1="9" x2="12" y2="5"/><circle cx="12" cy="4" r="1.2"/></g>
-<text class="title" x="1380" y="484">AI 패널 테스트</text>
-<text class="sub" x="1380" y="504">5개 AI 모델</text>
-
-<!-- 9. 원본 응답 수집 -->
-<rect class="proc-box" x="100" y="800" width="120" height="120" rx="22"/>
-<g class="icon-proc" transform="translate(138,838) scale(1.8)"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></g>
-<text class="title" x="160" y="944">원본 응답 수집</text>
-<text class="sub" x="160" y="964">500개 답변 시트화</text>
-
-<!-- 10. 답변 분석 -->
-<rect class="proc-box" x="320" y="800" width="120" height="120" rx="22"/>
-<g transform="translate(358,838) scale(1.8)" fill="#c7c7cf"><rect x="5" y="13" width="3" height="7"/><rect x="10.5" y="9" width="3" height="11"/><rect x="16" y="5" width="3" height="15"/></g>
-<text class="title" x="380" y="944">답변 분석</text>
-<text class="sub" x="380" y="964">SoM·SoV·감성·Citation</text>
-
-<!-- 11. 경쟁사 추출 -->
-<rect class="proc-box" x="540" y="800" width="120" height="120" rx="22"/>
-<g class="icon-proc" transform="translate(578,838) scale(1.8)"><line x1="4" y1="6" x2="20" y2="18"/><line x1="4" y1="18" x2="20" y2="6"/></g>
-<text class="title" x="600" y="944">경쟁사 추출</text>
-<text class="sub" x="600" y="964">언급 브랜드 추출</text>
-
-<!-- 12. 경쟁사 사이트 진단 -->
-<rect class="proc-box" x="760" y="800" width="120" height="120" rx="22"/>
-<g transform="translate(798,838) scale(1.8)"><rect x="6" y="4" width="12" height="16" rx="1" fill="none" stroke="#c7c7cf" stroke-width="1.7"/><rect x="9" y="7" width="2" height="2" fill="#c7c7cf"/><rect x="13" y="7" width="2" height="2" fill="#c7c7cf"/><rect x="9" y="11" width="2" height="2" fill="#c7c7cf"/><rect x="13" y="11" width="2" height="2" fill="#c7c7cf"/><rect x="9" y="15" width="2" height="2" fill="#c7c7cf"/><rect x="13" y="15" width="2" height="2" fill="#c7c7cf"/></g>
-<text class="title" x="820" y="944">경쟁사 사이트 진단</text>
-<text class="sub" x="820" y="964">상위 3곳 구조 분석</text>
-
-<!-- 13. 벤치마킹 비교 -->
-<rect class="proc-box" x="980" y="800" width="120" height="120" rx="22"/>
-<g class="icon-proc" transform="translate(1018,838) scale(1.8)"><line x1="12" y1="3" x2="12" y2="21"/><line x1="4" y1="7" x2="20" y2="7"/><path d="M4 7l-2.4 6a2.8 2.8 0 0 0 5.6 0z"/><path d="M20 7l-2.4 6a2.8 2.8 0 0 0 5.6 0z"/></g>
-<text class="title" x="1040" y="944">벤치마킹 비교</text>
-<text class="sub" x="1040" y="964">자사 vs 경쟁사</text>
-
-<!-- 14. 리포트 완성 -->
-<rect class="proc-box" x="1200" y="800" width="120" height="120" rx="22"/>
-<g class="icon-proc" transform="translate(1238,838) scale(1.8)"><rect x="6" y="3" width="12" height="18" rx="1"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></g>
-<text class="title" x="1260" y="944">리포트 완성</text>
-<text class="sub" x="1260" y="964">HTML + 벤치마크 문서</text>
-
-<!-- trailing + chip -->
-<rect x="1366" y="842" width="36" height="36" rx="10" fill="#292930" stroke="#3a3a40" stroke-width="1.5"/>
-<text x="1384" y="865" text-anchor="middle" font-size="16" font-weight="700" fill="#bcbcc2" font-family="sans-serif">+</text>
-
-</svg>
-</div>
-
-<div class="legend">
-  <div class="legend-item"><div class="legend-dot data"></div>리스닝마인드 데이터</div>
-  <div class="legend-item"><div class="legend-dot proc"></div>프로세스</div>
-</div>
-
+    return vals;
+  }
+}
+</script>
 </body>
 </html>
